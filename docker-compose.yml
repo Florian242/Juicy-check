@@ -3,35 +3,27 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: juicycheck-api
     restart: always
     ports:
       - "5005:3000"
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      DATABASE_URL: postgresql://floriandoudoutejuicycheck:juicycheck@db:5432/floriandoudoutejuicycheck
     depends_on:
       db:
         condition: service_healthy
 
   db:
     image: postgres:16-alpine
-    container_name: juicycheck-postgres
     restart: always
-
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-
-    #ports:
-     # - "5432:5432"
-
+      POSTGRES_USER: floriandoudoutejuicycheck
+      POSTGRES_PASSWORD: juicycheck
+      POSTGRES_DB: floriandoudoutejuicycheck
     volumes:
       - pgdata:/var/lib/postgresql/data
-
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U floriandoudoutejuicycheck"]
       interval: 5s
       timeout: 5s
       retries: 5
